@@ -4,172 +4,261 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Week5Task
+namespace Week4PDTasks
 {
     class Program
     {
         static void Main(string[] args)
         {
-            MyPoint myPoint = new MyPoint();
-            MyLine myLine = null;
-            MyPoint begin = takeInputForBegin();
-            MyPoint end = takeInputForEnd();
-            MyLine line = new MyLine(begin, end);
-           double totalDistance = begin.distanceWithCord(end.x, end.y);
-            Console.WriteLine(totalDistance);
-            Console.Read();
-           string option;
+            /* string time = Console.ReadLine();
+             int count = 0;
+             if (time.Length == 7)
+             {
+                 for (int x = 48; x < 50; x++)
+                 {
+                     if (time[0] == x)   //to check 1st digit of time is 0 ,1 or 2 
+                     {
+                         count++;
+                         Console.WriteLine("time[0] ");
+                         Console.WriteLine("count" + count);
+
+                     }
+                 }
+                 for (int y = 1; y < 5; y = y + 3)   // only  checks first and fourth index of time
+                 {
+                     for (int x = 48; x < 58; x++)   //to check  digit is from 0 to 9
+                     {
+                         if (time[y] == x)
+                         {
+                             count++;
+                             Console.WriteLine("Time[x" + x + " " + y + "y] ");
+                             Console.WriteLine("count" + count);
+
+                         }
+                     }
+                 }
+                 if (time[2] == 58)  //to check second index of time
+                 {
+                     count++;       //58 is ascii value semi colon :
+                     Console.WriteLine("time[2]");
+                     Console.WriteLine("count" + count);
+
+                 }
+                 for (int x = 48; x < 54; x++)
+                 {
+                     if (time[3] == x)
+                     {
+                         count++;      //to check 3rd index is 0 to 5 
+                         Console.WriteLine("time[3]");
+                         Console.WriteLine("count" + count);
+
+                     }
+                 }
+                 if (time[5] == 'P' || time[5] == 'A')
+                 {
+                     count++;
+                     Console.WriteLine("time[5]");
+                     Console.WriteLine("count" + count);
+
+
+                 }
+                 if (time[6] == 'M')
+                 {
+                     count++;
+                     Console.WriteLine("time[6]");
+                     Console.WriteLine("count" + count);
+
+
+                 }
+             }
+             Console.WriteLine("count" + count);
+             if (count == 7)
+             {
+                 Console.WriteLine("Welcome");
+                 Console.WriteLine("count" + count);
+
+             }*/
+            //  Console.Read();
+
+            ship shipObj = new ship();
+            List<ship> ShipList = new List<ship>();
+            Console.Clear();
+            int options;
             do
             {
-                Console.Clear();
-                option = menu();
-                if (option == "1")
+
+                options = menu();
+                if (options == 1)
                 {
-                    
-                    drawLine(totalDistance);
+                    addShip(ShipList,shipObj);
                 }
-                else if (option == "2")
+                else if (options == 2)
                 {
-                    updateTheBeginPoint(line);
-                    Console.ReadKey();
-                }
-                else if (option == "3")
-                {
-                    updateTheEndPoint(myLine);
-                    Console.ReadKey();
+                    Console.WriteLine("Enter Ship Serial Number to find its position:");
+                    string number = Console.ReadLine();
+
+                    ship g = new ship();
+                    if (g.CheckIt(ShipList, number) != null)
+                    {
+                        printShipLocation(ShipList, number);
+
+                    }
+                    else
+                    {
+                        Console.WriteLine("Not exist");
+                    }
+
+
+                    /*foreach(ship s in ShipList)
+                    {
+                        Console.WriteLine(s.ShipNumber);
+                        if (s.ShipNumber == number)
+                        {
+                            //Console.Write("found");
+                            Console.WriteLine("Latitude"+s.Latitude.degree+ "\u00b0" + s.Latitude.minutes+"`"+s.Latitude.direction);
+                            Console.WriteLine("Longitude"+s.Longitude.degree+ "\u00b0" + s.Longitude.minutes+"`"+s.Longitude.direction);
+                            
+                        }
+
+                    }*/
+
 
                 }
-                else if (option == "4")
+                else if (options == 3)
                 {
-                    ShowBeginPoint(myLine);
-                    Console.ReadKey();
+                    Console.WriteLine("Enter Ship Latitude");
+                    Console.WriteLine("Enter Latitude Degree");
+                    int degree = int.Parse(Console.ReadLine());
+                    Console.WriteLine("enter Latitude Minutes");
+                    float minutes = float.Parse(Console.ReadLine());
+                    Console.WriteLine("enter Latitude Direction");
+                    char direction = char.Parse(Console.ReadLine());
+
+                    Console.WriteLine("Enter Ship Latitude");
+                    Console.WriteLine("Enter Latitude Degree");
+                    int degree2 = int.Parse(Console.ReadLine());
+                    Console.WriteLine("Enter Latitude Minutes");
+                    float minutes2 = float.Parse(Console.ReadLine());
+                    Console.WriteLine("enter Latitude Direction");
+                    char direction2 = char.Parse(Console.ReadLine());
+                    ship obj = new ship();
+                    string check = obj.check(degree, degree2, minutes, minutes2, direction, direction2, ShipList);
+                    if (check != null)
+                    {
+                        Console.WriteLine("ship Serial Number is" + check);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Not Exist");
+                    }
+
 
                 }
-                else if (option == "5")
+                else if (options == 4)
                 {
-                    showEndPoint(myLine);
-                    Console.ReadKey();
+                    UpdateShipPosition(ShipList,shipObj);
 
-                }
-                else if (option == "6")
-                {
-                     getLength(totalDistance);
-                    Console.ReadKey();
-                }
-                else if (option == "7")
-                {
-                    PrintGradientOfLine(line);
-                    Console.ReadKey();
-
-                }
-                else if (option == "8")
-                {
-                    Console.WriteLine("Distance of begin point From Zero is" + begin.distanceFromZero());
-                    Console.ReadKey();
-
-                }
-                else if (option == "9")
-                {
-                    Console.WriteLine("Distance of end point From Zero is" + end.distanceFromZero());
-                    Console.ReadKey();
 
 
                 }
             }
-            while (option != "10");
+            while (options != 5);
+
 
         }
-        static string menu()
+        static int menu()
         {
-            Console.WriteLine("  1.Make a Line ");
-            Console.WriteLine("2.Update the begin point");
-            Console.WriteLine("3.Update the end point");
-            Console.WriteLine("4.Show the begin Point");
-            Console.WriteLine("5.Show the end point");
-            Console.WriteLine("6.Get the Length of the line");
-            Console.WriteLine("7.Get the Gradient of the Line");
-            Console.WriteLine("8.Find the distance of begin point from zero coordinates");
-            Console.WriteLine("9.Find the distance of end point from zero coordinates");
-            Console.WriteLine("10.Exit ");
-            string option = (Console.ReadLine());
-            return option;
+            int options;
+            Console.WriteLine("1.Add Ship");
+            Console.WriteLine("2.View Ship Position");
+            Console.WriteLine("3.View Ship Serial Number");
+            Console.WriteLine("4.Change Ship Position");
+            Console.WriteLine("Exist");
+            options = int.Parse(Console.ReadLine());
+            return options;
         }
-
-
-        static MyPoint takeInputForBegin()
-        {
-            Console.WriteLine("Enter Begin  x1 >");
-            int x1 = int.Parse(Console.ReadLine());
-            Console.WriteLine("Enter Begin y1 >");
-            int y1 = int.Parse(Console.ReadLine());
-            MyPoint begin = new MyPoint(x1, y1);
-            return begin;
-        }
-        static MyPoint takeInputForEnd()
-        { 
-            Console.WriteLine("Enter End x2 >");
-            int x2 = int.Parse(Console.ReadLine());
-            Console.WriteLine("Enter End y2");
-            int y2 = int.Parse(Console.ReadLine());
-            MyPoint end = new MyPoint(x2, y2);
-            return end;
-        }
-        
-        static void drawLine (double distance)
+        static void addShip(List<ship> ShipList,ship s)
         {
 
 
-            for (int x = 0; x < distance; x++)
+            Console.WriteLine("Enter Ship number");
+            string number = Console.ReadLine();
+            Console.WriteLine("Enter Ship Latitude");
+            Console.WriteLine("Enter Latitude Degree");
+            int degree = int.Parse(Console.ReadLine());
+            Console.WriteLine("enter Latitude Minutes");
+            float minutes = float.Parse(Console.ReadLine());
+            Console.WriteLine("enter Latitude Direction");
+            char direction = char.Parse(Console.ReadLine());
+
+            Console.WriteLine("Enter Ship Latitude");
+            Console.WriteLine("Enter Latitude Degree");
+            int degree2 = int.Parse(Console.ReadLine());
+            Console.WriteLine("Enter Latitude Minutes");
+            float minutes2 = float.Parse(Console.ReadLine());
+            Console.WriteLine("enter Latitude Direction");
+            char direction2 = char.Parse(Console.ReadLine());
+            s = new ship(degree, minutes, direction, number, degree2, minutes2, direction2);
+            s.AddtoList(ShipList, s);
+
+
+
+        }
+        public static void printShipLocation(List<ship> shipList, string number)
+        {
+            foreach (var i in shipList)
             {
-
-                Console.Write("_");
-            
+                if (i.ShipNumber == number)
+                {
+                    Console.WriteLine("Latitude of Ship is" + i.Latitude.degree + "\u00b0" + i.Latitude.minutes + "`" + i.Latitude.direction);
+                    Console.WriteLine("Longitude of ship :" + i.Longitude.degree + "\u00b0" + i.Longitude.minutes + "`" + i.Longitude.direction);
+                }
             }
 
-            Console.WriteLine();
-            Console.Read();
 
         }
-        static void updateTheBeginPoint(MyLine line )
+        public static void UpdateShipPosition(List<ship> shipList,ship shipObj) 
         {
-            Console.WriteLine("Enter New begining x1 Point");
-            line.begin.x = int.Parse(Console.ReadLine());
-            Console.WriteLine("Enter New Begining y1 point >");
-            line.begin.y = int.Parse(Console.ReadLine());
-        }
-        static void updateTheEndPoint(MyLine Line)
-        {
-            Console.WriteLine("Enter Ending Point x2 >");
-            Line.ending.x = int.Parse(Console.ReadLine());
-            Console.WriteLine("Enter New ending y2 point >");
-            Line.ending.y = int.Parse(Console.ReadLine());
-        }
-        static void ShowBeginPoint(MyLine Line)
-        {
-            Console.WriteLine("Begin x1 = " + Line.begin.getX());
-            Console.WriteLine("Begin y1 = " + Line.begin.getY());
+            Console.Write("Enter Ship Serial  number to update it>>");
+            string number = Console.ReadLine();
+            int count = 0;
+            foreach (var s in shipList)
+            {
+                if (s.ShipNumber == number)
+                {
+                Console.WriteLine("Enter Ship Latitude");
+                Console.WriteLine("Enter Latitude Degree");
+               s.Latitude.degree = int.Parse(Console.ReadLine());
+                Console.WriteLine("enter Latitude Minutes");
+                s.Latitude.minutes = float.Parse(Console.ReadLine());
+                Console.WriteLine("enter Latitude Direction");
+                s.Latitude.direction = char.Parse(Console.ReadLine());
 
-        }
-        static void showEndPoint(MyLine Line)
-        {
-            Console.WriteLine("End x2 = " + Line.ending.getX());
-            Console.WriteLine("End y2 = " + Line.ending.getY());
-        }
-       static void getLength(double length)
-        {
-            Console.WriteLine("Length of Line is>" + length);
-        }
-        static void PrintGradientOfLine(MyLine line)
-        {
-          Console.WriteLine( "Gradient of Line is >" + line.getGradientOfLine());
-        }
+                Console.WriteLine("Enter Ship Latitude");
+                Console.WriteLine("Enter Latitude Degree");
+                s.Longitude.degree = int.Parse(Console.ReadLine());
+                Console.WriteLine("Enter Latitude Minutes");
+                s.Longitude.minutes = float.Parse(Console.ReadLine());
+                Console.WriteLine("enter Latitude Direction");
+                s.Longitude.direction = char.Parse(Console.ReadLine());
+                    count = 1;
+                  
+                }
+
+            }
+        if(count == 1)
+            {
+                Console.WriteLine("Updated Succesfully");
+            }
+            else
+            {
+                Console.WriteLine("Not exist");
+            }
+
         
 
 
-
-
-
-
+        }
 
 
     }
